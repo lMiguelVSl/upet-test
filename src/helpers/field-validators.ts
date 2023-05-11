@@ -1,13 +1,13 @@
-export const isValidEmail = (email: string) => {
+export const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
-export const isValidPhoneNumber = (phoneNumber: string) => {
+export const isValidPhoneNumber = (phoneNumber: string): boolean => {
     const regex = /^\+?\d{10,14}$/;
     return regex.test(phoneNumber);
 }
-export const isValidPassword = (password: string) => {
+export const isValidPassword = (password: string): boolean => {
     const hasUppercase = /[A-Z]/.test(password);
     const hasLowercase = /[a-z]/.test(password);
     const hasNumber = /\d/.test(password);

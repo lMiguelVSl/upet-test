@@ -78,9 +78,9 @@ const FormComponent: React.FC = () => {
       setValPhone("The number is not correct");
       return false;
     }
-    console.log(enteredPassword);
     if(!isValidPassword(enteredPassword)) {
       setValPassword('The password is not valid');
+      return false;
     }
     return true;
   }
