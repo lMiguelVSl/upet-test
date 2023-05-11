@@ -12,6 +12,14 @@ export const isValidPassword = (password: string): boolean => {
     const hasLowercase = /[a-z]/.test(password);
     const hasNumber = /\d/.test(password);
     const isValidLength = password.length >= 8;
-  
+
     return hasUppercase && hasLowercase && hasNumber && isValidLength;
+}
+export const isValidName = (name: string) => {
+    if (!name || !name.length) return false;
+    return true;
+}
+export const isValidLastName = (lastName: string) => {
+    if (!lastName || !lastName.length) return false;
+    return true
 }

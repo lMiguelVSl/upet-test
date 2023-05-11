@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { capitalize, formatPhoneNumber } from "../helpers/string-helper";
 
 import flag from "../assets/Img/us_flag.jpg";
-import { isValidEmail, isValidPassword, isValidPhoneNumber } from "../helpers/field-validators";
+import { isValidEmail, isValidLastName, isValidName, isValidPassword, isValidPhoneNumber } from "../helpers/field-validators";
 
 
 const FormComponent: React.FC = () => {
@@ -14,23 +14,23 @@ const FormComponent: React.FC = () => {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
 
-  const [valName, setValName] = useState('');
-  const [valLastName, setValLastName] = useState('');
-  const [valPhone, setValPhone] = useState('');
+  const [valName, setValName] = useState(false);
+  const [valLastName, setValLastName] = useState(false);
+  const [valPhone, setValPhone] = useState(false);
   const [valEmail, setValEmail] = useState(false);
-  const [valPassword, setValPassword] = useState('');
+  const [valPassword, setValPassword] = useState(false);
 
   const nameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let nameVal: string = event.target.value;
     if (nameVal.length > 0) setEnteredName(capitalize(nameVal));
     else setEnteredName(nameVal);
-    setValName('');
+    setValName(isValidName(enteredName));
   }
   const lastNameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let lastNameVal: string = event.target.value;
     if (lastNameVal.length > 0) setEnteredLastName(capitalize(lastNameVal));
     else setEnteredLastName(lastNameVal);
-    setValLastName('');
+    setValLastName(isValidLastName(enteredLastName));
   }
   const phoneNumberInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length === 10) {
@@ -39,7 +39,7 @@ const FormComponent: React.FC = () => {
     } else {
       setEnteredPhoneNumber(event.target.value);
     }
-    setValPhone('');
+    setValPhone(isValidPhoneNumber(enteredPhoneNumber));
   }
   const emailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = event.target.value;
@@ -48,49 +48,14 @@ const FormComponent: React.FC = () => {
   }
   const passwordInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredPassword(event.target.value);
-    setValPassword('');
+    setValPassword(isValidPassword(enteredPassword));
   }
   const formSubmission = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (formValidation()) {
-      console.log('GO AND SAVE IN THE DB')
-      setEnteredName('');
-      setEnteredLastName('');
-      setEnteredPhoneNumber('');
-      setEnteredEmail('');
-      setEnteredPassword('');
-    } else {
-      console.log('bad form');
-    }
+    //save in the db
   }
 
-  const formValidation = (): Boolean => {
-    if (!enteredName || !enteredName.length) {
-      setValName("Name is required");
-      return false;
-    }
-    if (!enteredLastName || !enteredLastName.length) {
-      setValLastName("Last Name is required");
-      return false;
-    }
-    if(!isValidPhoneNumber(enteredPhoneNumber)) {
-      setValPhone("The number is not correct");
-      return false;
-    }
-    if(!isValidPassword(enteredPassword)) {
-      setValPassword('The password is not valid');
-      return false;
-    }
-    return true;
-  }
-
-  const isFormValid =
-    valName.length === 0
-    && valLastName.length === 0
-    && valPhone.length === 0
-    && valEmail
-    && valPassword.length === 0;
+  const isFormValid = valName && valLastName && valPhone && valEmail && valPassword;
 
   return (
     <Card style={{ maxWidth: 500, margin: "0 auto", padding: "20px 5px" }}>
@@ -107,8 +72,8 @@ const FormComponent: React.FC = () => {
                 variant="outlined"
                 onChange={nameInputHandler}
                 value={enteredName}
-                error={valName && valName.length ? true : false}
-                helperText={valName}
+                error={enteredName.length > 0 ? valName ? false : true : false}
+                helperText={enteredName.length > 0 ? valName ? '' : "Name is required" : ''}
                 fullWidth />
             </Grid>
             <Grid xs={6} item>
@@ -120,8 +85,8 @@ const FormComponent: React.FC = () => {
                 variant="outlined"
                 onChange={lastNameInputHandler}
                 value={enteredLastName}
-                error={valLastName && valLastName.length ? true : false}
-                helperText={valLastName}
+                error={enteredLastName.length > 0 ? valLastName ? false : true : false}
+                helperText={enteredLastName.length > 0 ? valLastName ? '' : "Last Name is required" : ''}
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
@@ -141,8 +106,6 @@ const FormComponent: React.FC = () => {
                 variant="outlined"
                 onChange={phoneNumberInputHandler}
                 value={enteredPhoneNumber}
-                error={valPhone && valPhone.length ? true : false}
-                helperText={valPhone}
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
@@ -167,8 +130,8 @@ const FormComponent: React.FC = () => {
                 variant="outlined"
                 onChange={passwordInputHandler}
                 value={enteredPassword}
-                error={valPassword && valPassword.length ? true : false}
-                helperText={valPassword}
+                error={enteredPassword.length > 0 ? valPassword ? false : true : false}
+                helperText={enteredPassword.length > 0 ? valPassword ? '' : "The password does not have the required characters: +1 M, +1L, +1N" : ''}
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
