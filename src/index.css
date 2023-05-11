@@ -1,45 +1,17 @@
 body {
   margin: 0;
-  background-color: #3f3f3f;
+  background-color: #e4e3e3;
 }
 
 .app {
-  width: 90%;
+  width: 50%;
   max-width: 43rem;
   padding: 1rem;
   border-radius: 12px;
   background-color: white;
   margin: 3rem auto;
-}
-
-.form-control {
-  margin-bottom: 1rem;
-}
-
-.form-control input,
-.form-control label {
-  display: block;
-}
-
-.form-control label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.form-control input,
-.form-control select {
-  font: inherit;
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  width: 20rem;
-  max-width: 100%;
-}
-
-.form-control input:focus {
-  outline: none;
-  border-color: #240370;
-  background-color: #e0d4fd;
+  height: 38.5rem;
+  max-height: 38.5rem;
 }
 
 .control-group {
@@ -53,26 +25,12 @@ body {
   flex: 1;
 }
 
-button {
+.button-form {
   font: inherit;
-  background-color: #240370;
+  background-color: #26edb1 !important;
   color: white;
-  border: 1px solid #240370;
+  border: 1px solid #26edb1;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
   cursor: pointer;
-}
-
-button:hover,
-button:active {
-  background-color: #33059e;
-  border-color: #33059e;
-}
-
-.form-actions {
-  text-align: right;
-}
-
-.form-actions button {
-  margin-left: 1rem;
 }
