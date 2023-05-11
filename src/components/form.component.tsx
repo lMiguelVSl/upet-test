@@ -1,6 +1,6 @@
 import { TextField, Button, Card, CardContent, Grid, Typography, InputAdornment } from "@mui/material"
 import React, { useState } from 'react';
-import { capitalize, formatPhoneNumber } from "../helpers/string-helper";
+import { capitalize, formatPhoneNumber, isValidEmail } from "../helpers/string-helper";
 
 import flag from "../assets/Img/us_flag.jpg";
 
@@ -18,6 +18,8 @@ const FormComponent: React.FC = () => {
   const [valPhone, setValPhone] = useState('');
   const [valEmail, setValEmail] = useState('');
   const [valPassword, setValPassword] = useState('');
+
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
   const nameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let nameVal: string = event.target.value;
@@ -41,8 +43,9 @@ const FormComponent: React.FC = () => {
     setValPhone('');
   }
   const emailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredEmail(event.target.value);
-    setValEmail('');
+    const newEmail = event.target.value;
+    setEnteredEmail(newEmail);
+    setIsEmailValid(isValidEmail(newEmail));
   }
   const passwordInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredPassword(event.target.value);
@@ -142,8 +145,8 @@ const FormComponent: React.FC = () => {
                 variant="outlined"
                 onChange={emailInputHandler}
                 value={enteredEmail}
-                error={valEmail && valEmail.length ? true : false}
-                helperText={valEmail}
+                error={enteredEmail.length > 0 ? isEmailValid ? false : true : false}
+                helperText={enteredEmail.length > 0 ? isEmailValid ? '' : 'Please enter a valid email address' : ''}
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
