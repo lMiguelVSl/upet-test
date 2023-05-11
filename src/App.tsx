@@ -2,7 +2,7 @@ import FormComponent from "./components/form.component.tsx"
 
 function App() {
   return (
-    <div>
+    <div className="app">
       <FormComponent/>
     </div>
   )
