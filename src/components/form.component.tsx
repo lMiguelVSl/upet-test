@@ -1,8 +1,9 @@
 import { TextField, Button, Card, CardContent, Grid, Typography, InputAdornment } from "@mui/material"
 import React, { useState } from 'react';
-import { capitalize, formatPhoneNumber, isValidEmail } from "../helpers/string-helper";
+import { capitalize, formatPhoneNumber } from "../helpers/string-helper";
 
 import flag from "../assets/Img/us_flag.jpg";
+import { isValidEmail, isValidPassword, isValidPhoneNumber } from "../helpers/field-validators";
 
 
 const FormComponent: React.FC = () => {
@@ -16,10 +17,8 @@ const FormComponent: React.FC = () => {
   const [valName, setValName] = useState('');
   const [valLastName, setValLastName] = useState('');
   const [valPhone, setValPhone] = useState('');
-  const [valEmail, setValEmail] = useState('');
+  const [valEmail, setValEmail] = useState(false);
   const [valPassword, setValPassword] = useState('');
-
-  const [isEmailValid, setIsEmailValid] = useState(false);
 
   const nameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let nameVal: string = event.target.value;
@@ -36,7 +35,7 @@ const FormComponent: React.FC = () => {
   const phoneNumberInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length === 10) {
       let numberFormatted: string = formatPhoneNumber(event.target.value);
-      setEnteredPhoneNumber(numberFormatted || '');
+      setEnteredPhoneNumber('+1' + numberFormatted || '');
     } else {
       setEnteredPhoneNumber(event.target.value);
     }
@@ -45,7 +44,7 @@ const FormComponent: React.FC = () => {
   const emailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = event.target.value;
     setEnteredEmail(newEmail);
-    setIsEmailValid(isValidEmail(newEmail));
+    setValEmail(isValidEmail(newEmail));
   }
   const passwordInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredPassword(event.target.value);
@@ -67,7 +66,6 @@ const FormComponent: React.FC = () => {
   }
 
   const formValidation = (): Boolean => {
-    console.log(enteredName);
     if (!enteredName || !enteredName.length) {
       setValName("Name is required");
       return false;
@@ -76,12 +74,23 @@ const FormComponent: React.FC = () => {
       setValLastName("Last Name is required");
       return false;
     }
-    console.log(enteredLastName);
-    console.log(enteredPhoneNumber);
-    console.log(enteredEmail);
+    if(!isValidPhoneNumber(enteredPhoneNumber)) {
+      setValPhone("The number is not correct");
+      return false;
+    }
     console.log(enteredPassword);
+    if(!isValidPassword(enteredPassword)) {
+      setValPassword('The password is not valid');
+    }
     return true;
   }
+
+  const isFormValid =
+    valName.length === 0
+    && valLastName.length === 0
+    && valPhone.length === 0
+    && valEmail
+    && valPassword.length === 0;
 
   return (
     <Card style={{ maxWidth: 500, margin: "0 auto", padding: "20px 5px" }}>
@@ -145,8 +154,8 @@ const FormComponent: React.FC = () => {
                 variant="outlined"
                 onChange={emailInputHandler}
                 value={enteredEmail}
-                error={enteredEmail.length > 0 ? isEmailValid ? false : true : false}
-                helperText={enteredEmail.length > 0 ? isEmailValid ? '' : 'Please enter a valid email address' : ''}
+                error={enteredEmail.length > 0 ? valEmail ? false : true : false}
+                helperText={enteredEmail.length > 0 ? valEmail ? '' : 'Please enter a valid email address' : ''}
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
@@ -163,8 +172,11 @@ const FormComponent: React.FC = () => {
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
-              <Button variant="contained"
-                type="submit" fullWidth>Submit</Button>
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={!isFormValid}
+                fullWidth>NEXT</Button>
             </Grid>
           </Grid>
         </form>
