@@ -5,6 +5,7 @@ import { capitalize, formatPhoneNumber } from "../../helpers/string-helper";
 import flag from "../../assets/Img/us_flag.jpg";
 import { isValidEmail, isValidLastName, isValidName, isValidPassword, isValidPhoneNumber } from "../../helpers/field-validators";
 import { User } from "../../models/user";
+import { postUser } from "../../services/formService";
 
 
 const FormComponent: React.FC = () => {
@@ -58,6 +59,10 @@ const FormComponent: React.FC = () => {
       password: enteredPassword
     }
     
+    postUser(user)
+    .then(res => res.json())
+    .then(resData => console.log('FTCH RESPONSE:', resData))
+    .catch(err => console.log('EROR FETCH', err));
   }
 
   useEffect(() => {
