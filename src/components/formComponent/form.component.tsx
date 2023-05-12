@@ -2,7 +2,7 @@ import { TextField, Button, Card, CardContent, Grid, Typography, InputAdornment 
 import React, { useEffect, useState } from 'react';
 import { capitalize, formatPhoneNumber } from "../../helpers/string-helper";
 
-import flag from "../assets/Img/us_flag.jpg";
+import flag from "../../assets/Img/us_flag.jpg";
 import { isValidEmail, isValidLastName, isValidName, isValidPassword, isValidPhoneNumber } from "../../helpers/field-validators";
 import { User } from "../../models/user";
 
@@ -132,7 +132,7 @@ const FormComponent: React.FC = () => {
                 onChange={emailInputHandler}
                 value={enteredEmail}
                 error={enteredEmail.length > 0 ? valEmail ? false : true : false}
-                helperText={enteredEmail.length > 0 ? valEmail ? '' : 'Please enter a valid email address' : ''}
+                helperText={enteredEmail.length > 0 ? valEmail ? '' : 'Invalid email address' : ''}
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
@@ -145,7 +145,7 @@ const FormComponent: React.FC = () => {
                 onChange={passwordInputHandler}
                 value={enteredPassword}
                 error={enteredPassword.length > 0 ? valPassword ? false : true : false}
-                helperText={enteredPassword.length > 0 ? valPassword ? '' : "The password does not have the required characters: +1 M, +1L, +1N" : ''}
+                helperText={enteredPassword.length > 0 ? valPassword ? '' : "Oops! You need a password longer than 8 characters with numbers and letters." : ''}
                 fullWidth />
             </Grid>
             <Grid xs={12} item>
