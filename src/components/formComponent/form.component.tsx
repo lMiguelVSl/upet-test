@@ -1,9 +1,10 @@
 import { TextField, Button, Card, CardContent, Grid, Typography, InputAdornment } from "@mui/material"
-import React, { useState } from 'react';
-import { capitalize, formatPhoneNumber } from "../helpers/string-helper";
+import React, { useEffect, useState } from 'react';
+import { capitalize, formatPhoneNumber } from "../../helpers/string-helper";
 
 import flag from "../assets/Img/us_flag.jpg";
-import { isValidEmail, isValidLastName, isValidName, isValidPassword, isValidPhoneNumber } from "../helpers/field-validators";
+import { isValidEmail, isValidLastName, isValidName, isValidPassword, isValidPhoneNumber } from "../../helpers/field-validators";
+import { User } from "../../models/user";
 
 
 const FormComponent: React.FC = () => {
@@ -22,14 +23,15 @@ const FormComponent: React.FC = () => {
 
   const nameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let nameVal: string = event.target.value;
-    if (nameVal.length > 0) setEnteredName(capitalize(nameVal));
-    else setEnteredName(nameVal);
-    setValName(isValidName(enteredName));
+    if (nameVal.length > 0) nameVal = capitalize(nameVal);
+    setEnteredName(nameVal);
+    let isValid = isValidName(enteredName);
+    setValName(isValid);
   }
   const lastNameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let lastNameVal: string = event.target.value;
-    if (lastNameVal.length > 0) setEnteredLastName(capitalize(lastNameVal));
-    else setEnteredLastName(lastNameVal);
+    if (lastNameVal.length > 0) lastNameVal = capitalize(lastNameVal);
+    setEnteredLastName(lastNameVal);
     setValLastName(isValidLastName(enteredLastName));
   }
   const phoneNumberInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +55,19 @@ const FormComponent: React.FC = () => {
   const formSubmission = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     //save in the db
+    let user: User = {
+      name: enteredName,
+      lastName: enteredLastName,
+      phoneNumber: enteredPhoneNumber,
+      email: enteredEmail,
+      password: enteredPassword
+    }
+    
   }
+
+  useEffect(() => {
+    console.log('USE EFFECT')
+  }, []);
 
   const isFormValid = valName && valLastName && valPhone && valEmail && valPassword;
 
@@ -65,7 +79,7 @@ const FormComponent: React.FC = () => {
           <Grid container spacing={1}>
             <Grid xs={6} item>
               <TextField
-                id="outlined-basic"
+                id="first-name-id"
                 type="text"
                 label="First name"
                 size='small'
@@ -78,7 +92,7 @@ const FormComponent: React.FC = () => {
             </Grid>
             <Grid xs={6} item>
               <TextField
-                id="outlined-basic"
+                id="last-name-id"
                 type="text"
                 label="Last name"
                 size='small'
@@ -91,7 +105,7 @@ const FormComponent: React.FC = () => {
             </Grid>
             <Grid xs={12} item>
               <TextField
-                id="outlined-basic"
+                id="phone-number-id"
                 type="tel"
                 label="Phone number"
                 size='small'
@@ -110,7 +124,7 @@ const FormComponent: React.FC = () => {
             </Grid>
             <Grid xs={12} item>
               <TextField
-                id="outlined-basic"
+                id="email-id"
                 type="email"
                 label="Email"
                 size='small'
@@ -123,7 +137,7 @@ const FormComponent: React.FC = () => {
             </Grid>
             <Grid xs={12} item>
               <TextField
-                id="outlined-basic"
+                id="password-id"
                 type="password"
                 label="Password"
                 size='small'

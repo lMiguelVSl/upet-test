@@ -1,4 +1,4 @@
-import FormComponent from "./components/form.component.tsx"
+import FormComponent from "./components/formComponent/form.component.tsx"
 
 function App() {
   return (
