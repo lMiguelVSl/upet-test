@@ -20,19 +20,17 @@ const FormComponent: React.FC = () => {
   const [valPhone, setValPhone] = useState(false);
   const [valEmail, setValEmail] = useState(false);
   const [valPassword, setValPassword] = useState(false);
+  const [validForm, setValidForm] = useState(false);
 
   const nameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let nameVal: string = event.target.value;
     if (nameVal.length > 0) nameVal = capitalize(nameVal);
     setEnteredName(nameVal);
-    let isValid = isValidName(enteredName);
-    setValName(isValid);
   }
   const lastNameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let lastNameVal: string = event.target.value;
     if (lastNameVal.length > 0) lastNameVal = capitalize(lastNameVal);
     setEnteredLastName(lastNameVal);
-    setValLastName(isValidLastName(enteredLastName));
   }
   const phoneNumberInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length === 10) {
@@ -41,16 +39,13 @@ const FormComponent: React.FC = () => {
     } else {
       setEnteredPhoneNumber(event.target.value);
     }
-    setValPhone(isValidPhoneNumber(enteredPhoneNumber));
   }
   const emailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = event.target.value;
     setEnteredEmail(newEmail);
-    setValEmail(isValidEmail(newEmail));
   }
   const passwordInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredPassword(event.target.value);
-    setValPassword(isValidPassword(enteredPassword));
   }
   const formSubmission = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -66,10 +61,15 @@ const FormComponent: React.FC = () => {
   }
 
   useEffect(() => {
-    console.log('USE EFFECT')
-  }, []);
+    setValName(isValidName(enteredName));
+    setValLastName(isValidLastName(enteredLastName));
+    setValPhone(isValidPhoneNumber(enteredPhoneNumber));
+    setValEmail(isValidEmail(enteredEmail));
+    setValPassword(isValidPassword(enteredPassword));
+    let isFormValid: boolean = valName && valLastName && valEmail && valPassword;
+    setValidForm(isFormValid);
+  }, [enteredName, enteredLastName, enteredPhoneNumber, enteredEmail, enteredPassword]);
 
-  const isFormValid = valName && valLastName && valPhone && valEmail && valPassword;
 
   return (
     <Card style={{ maxWidth: 500, margin: "0 auto", padding: "20px 5px" }}>
@@ -152,7 +152,7 @@ const FormComponent: React.FC = () => {
               <Button
                 variant="contained"
                 type="submit"
-                disabled={!isFormValid}
+                disabled={!validForm}
                 fullWidth>NEXT</Button>
             </Grid>
           </Grid>
