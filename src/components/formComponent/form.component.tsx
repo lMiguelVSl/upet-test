@@ -78,10 +78,11 @@ const FormComponent: React.FC = () => {
     postUser(user)
       .then(res => res.json())
       .then(resData => {
-        console.log('FTCH RESPONSE:', resData);
-        navigate('/userApplication');
+        navigate(`/userApplication/${resData.id}`);
       })
-      .catch(err => console.log('EROR FETCH', err));
+      .catch(() => {
+        setIsClicked(false);
+      });
   }
 
   useEffect(() => {
