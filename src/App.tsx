@@ -1,9 +1,9 @@
-import FormComponent from "./components/formComponent/form.component.tsx"
+import { AppRouter } from "./router/AppRouter.tsx"
 
 function App() {
   return (
     <div className="app">
-      <FormComponent/>
+      <AppRouter/>
     </div>
   )
 }

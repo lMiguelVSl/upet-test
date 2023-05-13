@@ -1,11 +1,14 @@
 import { TextField, Button, Card, CardContent, Grid, Typography, InputAdornment } from "@mui/material"
 import React, { useEffect, useState } from 'react';
-import { capitalize, formatPhoneNumber } from "../../helpers/string-helper";
+import { useNavigate } from 'react-router-dom';
 
-import flag from "../../assets/Img/us_flag.jpg";
-import { isValidEmail, isValidLastName, isValidName, isValidPassword, isValidPhoneNumber } from "../../helpers/field-validators";
-import { User } from "../../models/user";
+import '../../index.css';
+
+import { isValidEmail, isValidLastName, isValidName, isValidPassword } from "../../helpers/field-validators";
+import { capitalize, formatPhoneNumber } from "../../helpers/string-helper";
 import { postUser } from "../../services/formService";
+import flag from "../../assets/Img/us_flag.jpg";
+import { User } from "../../models/user";
 
 
 const FormComponent: React.FC = () => {
@@ -15,6 +18,7 @@ const FormComponent: React.FC = () => {
   const [enteredPhoneNumber, setEnteredPhoneNumber] = useState('');
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
+  const [isClicked, setIsClicked] = useState(false);
 
   const [valName, setValName] = useState(false);
   const [valLastName, setValLastName] = useState(false);
@@ -22,21 +26,24 @@ const FormComponent: React.FC = () => {
   const [valEmail, setValEmail] = useState(false);
   const [valPassword, setValPassword] = useState(false);
   const [validForm, setValidForm] = useState(false);
+  const navigate = useNavigate();
 
   const nameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let nameVal: string = event.target.value;
     if (nameVal.length > 0) nameVal = capitalize(nameVal);
     setEnteredName(nameVal);
+    setValName(isValidName(nameVal));
   }
   const lastNameInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let lastNameVal: string = event.target.value;
     if (lastNameVal.length > 0) lastNameVal = capitalize(lastNameVal);
     setEnteredLastName(lastNameVal);
+    setValLastName(isValidLastName(lastNameVal));
   }
   const phoneNumberInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length === 10) {
       let numberFormatted: string = formatPhoneNumber(event.target.value);
-      setEnteredPhoneNumber('+1' + numberFormatted || '');
+      setEnteredPhoneNumber(numberFormatted || '');
     } else {
       setEnteredPhoneNumber(event.target.value);
     }
@@ -44,13 +51,16 @@ const FormComponent: React.FC = () => {
   const emailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = event.target.value;
     setEnteredEmail(newEmail);
+    setValEmail(isValidEmail(newEmail));
   }
   const passwordInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredPassword(event.target.value);
+    let newPassword = event.target.value;
+    setEnteredPassword(newPassword);
+    setValPassword(isValidPassword(newPassword));
   }
   const formSubmission = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    //save in the db
+    setIsClicked(true);
     let user: User = {
       name: enteredName,
       lastName: enteredLastName,
@@ -58,19 +68,23 @@ const FormComponent: React.FC = () => {
       email: enteredEmail,
       password: enteredPassword
     }
-    
+
+    setEnteredName('');
+    setEnteredLastName('');
+    setEnteredPhoneNumber('');
+    setEnteredEmail('');
+    setEnteredPassword('');
+
     postUser(user)
-    .then(res => res.json())
-    .then(resData => console.log('FTCH RESPONSE:', resData))
-    .catch(err => console.log('EROR FETCH', err));
+      .then(res => res.json())
+      .then(resData => {
+        console.log('FTCH RESPONSE:', resData);
+        navigate('/userApplication');
+      })
+      .catch(err => console.log('EROR FETCH', err));
   }
 
   useEffect(() => {
-    setValName(isValidName(enteredName));
-    setValLastName(isValidLastName(enteredLastName));
-    setValPhone(isValidPhoneNumber(enteredPhoneNumber));
-    setValEmail(isValidEmail(enteredEmail));
-    setValPassword(isValidPassword(enteredPassword));
     let isFormValid: boolean = valName && valLastName && valEmail && valPassword;
     setValidForm(isFormValid);
   }, [enteredName, enteredLastName, enteredPhoneNumber, enteredEmail, enteredPassword]);
@@ -158,7 +172,9 @@ const FormComponent: React.FC = () => {
                 variant="contained"
                 type="submit"
                 disabled={!validForm}
-                fullWidth>NEXT</Button>
+                fullWidth>
+                {isClicked ? <div className="loader"></div> : <div>NEXT</div>}
+              </Button>
             </Grid>
           </Grid>
         </form>
