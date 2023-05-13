@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../index.css';
 
 import { isValidEmail, isValidLastName, isValidName, isValidPassword } from "../../helpers/field-validators";
-import { capitalize, formatPhoneNumber } from "../../helpers/string-helper";
+import { capitalize, formatPhoneNumber, _capitalize } from "../../helpers/string-helper";
 import { postUser } from "../../services/formService";
 import flag from "../../assets/Img/us_flag.jpg";
 import { User } from "../../models/user";
@@ -22,7 +22,6 @@ const FormComponent: React.FC = () => {
 
   const [valName, setValName] = useState(false);
   const [valLastName, setValLastName] = useState(false);
-  const [valPhone, setValPhone] = useState(false);
   const [valEmail, setValEmail] = useState(false);
   const [valPassword, setValPassword] = useState(false);
   const [validForm, setValidForm] = useState(false);
@@ -49,7 +48,8 @@ const FormComponent: React.FC = () => {
     }
   }
   const emailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = event.target.value;
+    let newEmail = event.target.value;
+    if (newEmail.length > 0) newEmail = _capitalize(newEmail);
     setEnteredEmail(newEmail);
     setValEmail(isValidEmail(newEmail));
   }
