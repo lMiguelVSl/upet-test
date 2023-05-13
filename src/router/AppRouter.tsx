@@ -7,7 +7,7 @@ export const AppRouter = () => {
         <>
             <Routes>
                 <Route path="/userForm" element={<FormComponent />} />
-                <Route path="/userApplication" element={<UserApplication />} />
+                <Route path="/userApplication/:id" element={<UserApplication />} />
                 <Route path="/" element={<Navigate to={"/userForm"} />}></Route>
             </Routes>
         </>
