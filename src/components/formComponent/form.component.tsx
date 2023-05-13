@@ -78,7 +78,7 @@ const FormComponent: React.FC = () => {
     postUser(user)
       .then(res => res.json())
       .then(resData => {
-        navigate(`/userApplication/${resData.id}`);
+        navigate(`/userApplication/${resData.userResult.id}`);
       })
       .catch(() => {
         setIsClicked(false);
