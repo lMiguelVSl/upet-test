@@ -1,0 +1,21 @@
+#header-message {
+    display: flex;
+    justify-content: space-between;
+    max-width: 17rem;
+}
+
+#thanks-m {
+    max-width: 10rem;
+}
+
+#main-message {
+    color: gray;
+    max-width: 20rem;
+}
+
+#component-content {
+    padding-left: 20%;
+}
+#icon {
+    margin: auto;
+}
