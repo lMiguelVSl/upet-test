@@ -10,3 +10,11 @@ you may insert this commands.
 - npm run dev
 
 now open in your browser the url the terminal showed you.
+
+to dockerize this app follow the next teps:
+
+into the application directory execute => docker build -t mavs/upet-test-ui .
+
+now go to the cmd and execute the next command => docker run -p 5173:5173 mavs/upet-test-ui
+
+with these two steps you should be able to open the url that the cmd showed you and see the ui app
